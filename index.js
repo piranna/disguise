@@ -13,6 +13,22 @@
  */
 
 
+/**
+ * Generic `Promise.catch()` method
+ *
+ * It delegate its functionality on the `then()` of the object where it's
+ * applied, both directly or on its class definition prototype
+ *
+ * @param {Function} [onRejected]
+ *
+ * @return {Promise}
+ */
+ function catch(onRejected)
+ {
+   return this.then(null, onRejected)
+ }
+
+
 /*
  * Disguise an object giving it the appearance of another
  *
@@ -77,8 +93,11 @@ function disguiseThenable(target, source)
       return disguiseThenable(promise, source)
     }
 
-    target.then  = then
-    target.catch = then.bind(target, null)
+    Object.defineProperties(target,
+    {
+      then:  {value: then},
+      catch: {value: catch}
+    })
   }
 
    return disguise(target, source)

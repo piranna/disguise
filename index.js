@@ -12,12 +12,18 @@
  * details.
  */
 
+
 /*
  * Disguise an object giving it the appearance of another
  *
- * Add bind'ed functions and properties to an object delegating the actions and
- * updates to the source one so it can act as another one while retaining its
- * original personality (i.e. duplicates and instanceof are preserved)
+ * Add bind'ed functions and properties to a `target` object delegating the
+ * actions and attributes updates to the `source` one while retaining its
+ * original personality (i.e. duplicates and `instanceof` are preserved)
+ *
+ * @param {Object} target - the object to be disguised
+ * @param {Object} source - the object where to fetch its methods and attributes
+ *
+ * @return {Object} `target` disguised
  */
 function disguise(target, source) {
   for (var key in source) {
@@ -40,5 +46,47 @@ function disguise(target, source) {
 
   return target
 }
+
+/*
+ * Disguise a thenable object
+ *
+ * If available, `target.then()` gets replaced by a method that exec the
+ * `onFulfilled` and `onRejected` callbacks using `source` as `this` object, and
+ * return the Promise returned by the original `target.then()` method already
+ * disguised. It also add a `target.catch()` method pointing to the newly added
+ * `target.then()`, being it previously available or not.
+ *
+ * @param {thenable} target - the object to be disguised
+ * @param {Object} source - the object where to fetch its methods and attributes
+ *
+ * @return {thenable} `target` disguised
+ */
+function disguiseThenable(target, source)
+{
+  if(target.then instanceof Function)
+  {
+    var target_then = target.then
+
+    function then(onFulfilled, onRejected)
+    {
+      if(onFulfilled != null) onFulfilled = onFulfilled.bind(source)
+      if(onRejected  != null) onRejected  = onRejected .bind(source)
+
+      var promise = target_then.call(target, onFulfilled, onRejected)
+
+      return disguiseThenable(promise, source)
+    }
+
+    target.then  = then
+    target.catch = then.bind(target, null)
+  }
+
+   return disguise(target, source)
+ }
+
+
+disguise.disguise         = disguise
+disguise.disguiseThenable = disguiseThenable
+
 
 module.exports = disguise

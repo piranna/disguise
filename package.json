@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Disguise an object giving it the appearance of another",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/piranna/disguise/issues"
   },
-  "homepage": "https://github.com/piranna/disguise#readme"
+  "homepage": "https://github.com/piranna/disguise#readme",
+  "dependencies": {
+    "mocha": "^2.3.4"
+  }
 }

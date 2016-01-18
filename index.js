@@ -8,7 +8,7 @@
  *
  * @return {Promise}
  */
- function catch(onRejected)
+ function promiseCatch(onRejected)
  {
    return this.then(null, onRejected)
  }
@@ -26,23 +26,27 @@
  *
  * @return {Object} `target` disguised
  */
-function disguise(target, source) {
-  for (var key in source) {
-    if (target[key] !== undefined) continue
+function disguise(target, source)
+{
+  for(var key in source)
+  {
+    if(target[key] !== undefined) continue
 
-    if (typeof source[key] === 'function')
-      Object.defineProperty(target, key, {
+    if(typeof source[key] === 'function')
+      var descriptor =
+      {
         value: source[key].bind(source)
-      })
+      }
     else
-      Object.defineProperty(target, key, {
-        get: function () {
-          return source[key]
-        },
-        set: function (value) {
-          source[key] = value
-        }
-      })
+      var descriptor =
+      {
+        get: function(){return source[key]},
+        set: function(value){source[key] = value}
+      }
+
+    descriptor.enumerable = true
+
+    Object.defineProperty(target, key, descriptor)
   }
 
   return target
@@ -81,7 +85,7 @@ function disguiseThenable(target, source)
     Object.defineProperties(target,
     {
       then:  {value: then},
-      catch: {value: catch}
+      catch: {value: promiseCatch}
     })
   }
 

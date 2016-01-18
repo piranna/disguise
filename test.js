@@ -32,3 +32,22 @@ describe('disguise', function()
     assert.deepStrictEqual(disguised, expected)
   })
 })
+
+describe('disguiseThenable', function()
+{
+  it('promise callbacks exec on the object context', function(done)
+  {
+    var promise = Promise.resolve()
+
+    var expected = {value: 'qwerty'}
+
+    var disguised = disguise.disguiseThenable(promise, expected)
+
+    disguised.then(function()
+    {
+      assert.deepStrictEqual(this, expected)
+      done()
+    },
+    done)
+  })
+})

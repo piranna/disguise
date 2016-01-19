@@ -28,6 +28,8 @@
  */
 function disguise(target, source)
 {
+  if(target === source) return target
+
   for(var key in source)
   {
     if(target[key] !== undefined) continue
@@ -68,6 +70,8 @@ function disguise(target, source)
  */
 function disguiseThenable(target, source)
 {
+  if(target === source) return target
+
   if(target.then instanceof Function)
   {
     var target_then = target.then

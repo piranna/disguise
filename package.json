@@ -1,6 +1,6 @@
 {
   "name": "disguise",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Disguise an object giving it the appearance of another",
   "scripts": {
     "test": "mocha"

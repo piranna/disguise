@@ -37,7 +37,7 @@ function disguise(target, source)
     if(typeof source[key] === 'function')
       var descriptor =
       {
-        value: source[key].bind(source)
+        value: source[key]
       }
     else
       var descriptor =
@@ -78,8 +78,8 @@ function disguiseThenable(target, source)
 
     function then(onFulfilled, onRejected)
     {
-      if(onFulfilled != null) onFulfilled = onFulfilled.bind(source)
-      if(onRejected  != null) onRejected  = onRejected .bind(source)
+      if(onFulfilled != null) onFulfilled = onFulfilled.bind(target)
+      if(onRejected  != null) onRejected  = onRejected .bind(target)
 
       var promise = target_then.call(target, onFulfilled, onRejected)
 

@@ -30,9 +30,9 @@ function disguise(target, source)
 {
   if(target === source) return target
 
-  for(var key in source)
+  Object.keys(source).forEach(function(key)
   {
-    if(target[key] !== undefined) continue
+    if(target[key] !== undefined) return
 
     if(typeof source[key] === 'function')
       var descriptor =
@@ -49,7 +49,7 @@ function disguise(target, source)
     descriptor.enumerable = true
 
     Object.defineProperty(target, key, descriptor)
-  }
+  })
 
   return target
 }

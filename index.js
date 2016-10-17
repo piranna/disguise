@@ -1,3 +1,5 @@
+'use strict'
+
 /**
  * Generic `Promise.catch()` method
  *
@@ -14,7 +16,11 @@
  }
 
 
-/*
+//
+// Public API
+//
+
+/**
  * Disguise an object giving it the appearance of another
  *
  * Add bind'ed functions and properties to a `target` object delegating the
@@ -54,7 +60,7 @@ function disguise(target, source)
   return target
 }
 
-/*
+/**
  * Disguise a thenable object
  *
  * If available, `target.then()` gets replaced by a method that exec the
@@ -93,12 +99,13 @@ function disguiseThenable(target, source)
     })
   }
 
-   return disguise(target, source)
- }
+  return disguise(target, source)
+}
 
 
 disguise.disguise         = disguise
 disguise.disguiseThenable = disguiseThenable
+disguise.thenable         = disguiseThenable
 
 
 module.exports = disguise

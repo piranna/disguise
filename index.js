@@ -28,7 +28,7 @@
  */
 function disguise(target, source)
 {
-  if(target === source) return target
+  if(source == null || target === source) return target
 
   Object.keys(source).forEach(function(key)
   {

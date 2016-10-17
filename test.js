@@ -151,3 +151,22 @@ describe('disguiseThenable', function()
     .then(done, done)
   })
 })
+
+describe('unthenable', function()
+{
+  it('`.then()` and `.catch()` should be removed', function()
+  {
+    let promise = Promise.resolve()
+        promise.foo = 'bar'
+
+    assert.ok(promise.then instanceof Function)
+    assert.ok(promise.catch instanceof Function)
+
+    let unthenabled = disguise.unthenable(promise)
+
+    assert.notStrictEqual(unthenabled, promise)
+    assert.strictEqual(unthenabled.then, undefined)
+    assert.strictEqual(unthenabled.catch, undefined)
+    assert.strictEqual(unthenabled.foo, 'bar')
+  })
+})

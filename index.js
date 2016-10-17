@@ -102,10 +102,35 @@ function disguiseThenable(target, source)
   return disguise(target, source)
 }
 
+/**
+ * Return a copy of the input object without `.then()` and `.catch()`
+ *
+ * @param {thenable} input
+ *
+ * @return {Object} unthenabled input object
+ */
+function unthenable(input)
+{
+  let then = input.then
+  if(then instanceof Function)
+  {
+    let result = disguise({}, input)
+
+    delete result.then
+    delete result.catch
+
+    return result
+  }
+
+  // `input` is not thenable
+  return input
+}
+
 
 disguise.disguise         = disguise
 disguise.disguiseThenable = disguiseThenable
 disguise.thenable         = disguiseThenable
+disguise.unthenable       = unthenable
 
 
 module.exports = disguise

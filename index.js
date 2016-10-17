@@ -29,16 +29,18 @@
  *
  * @param {Object} target - the object to be disguised
  * @param {Object} source - the object where to fetch its methods and attributes
+ * @param {Object} [unthenable] - the returned object should not be a thenable
  *
  * @return {Object} `target` disguised
  */
-function disguise(target, source)
+function disguise(target, source, unthenable)
 {
   if(source == null || target === source) return target
 
-  Object.keys(source).forEach(function(key)
+  for(let key in source)
   {
-    if(target[key] !== undefined) return
+    if(target[key] !== undefined) continue
+    if(unthenable && (key === 'then' || key === 'catch')) continue
 
     if(typeof source[key] === 'function')
       var descriptor =
@@ -55,7 +57,7 @@ function disguise(target, source)
     descriptor.enumerable = true
 
     Object.defineProperty(target, key, descriptor)
-  })
+  }
 
   return target
 }
@@ -111,16 +113,7 @@ function disguiseThenable(target, source)
  */
 function unthenable(input)
 {
-  let then = input.then
-  if(then instanceof Function)
-  {
-    let result = disguise({}, input)
-
-    delete result.then
-    delete result.catch
-
-    return result
-  }
+  if(input && input.then instanceof Function) return disguise({}, input, true)
 
   // `input` is not thenable
   return input

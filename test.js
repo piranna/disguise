@@ -154,6 +154,13 @@ describe('disguiseThenable', function()
 
 describe('unthenable', function()
 {
+  it('undefined', function()
+  {
+    let unthenabled = disguise.unthenable()
+
+    assert.strictEqual(unthenabled, undefined)
+  })
+
   it('`.then()` and `.catch()` should be removed', function()
   {
     let promise = Promise.resolve()
@@ -167,6 +174,23 @@ describe('unthenable', function()
     assert.notStrictEqual(unthenabled, promise)
     assert.strictEqual(unthenabled.then, undefined)
     assert.strictEqual(unthenabled.catch, undefined)
+    assert.strictEqual(unthenabled.foo, 'bar')
+  })
+
+  it('copy attributes on prototype', function()
+  {
+    function A(){}
+    A.prototype.foo = 'bar'
+    A.prototype.then = function(){}
+
+    let promise = new A()
+
+    assert.ok(promise.then instanceof Function)
+
+    let unthenabled = disguise.unthenable(promise)
+
+    assert.notStrictEqual(unthenabled, promise)
+    assert.strictEqual(unthenabled.then, undefined)
     assert.strictEqual(unthenabled.foo, 'bar')
   })
 })

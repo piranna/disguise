@@ -127,10 +127,9 @@ function unthenable(input)
 }
 
 
-disguise.disguise         = disguise
-disguise.disguiseThenable = disguiseThenable
-disguise.thenable         = disguiseThenable
-disguise.unthenable       = unthenable
+disguiseThenable.disguise         = disguise
+disguiseThenable.disguiseThenable = disguiseThenable
+disguiseThenable.unthenable       = unthenable
 
 
-module.exports = disguise
+module.exports = disguiseThenable

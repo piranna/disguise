@@ -16,6 +16,6 @@
   },
   "homepage": "https://github.com/piranna/disguise#readme",
   "dependencies": {
-    "mocha": "^3.1.2"
+    "mocha": "^10.1.0"
   }
 }
